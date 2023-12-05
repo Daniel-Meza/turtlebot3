@@ -42,6 +42,8 @@ Odometry::Odometry(
   nh_->declare_parameter<bool>("odometry.use_imu");
   nh_->declare_parameter<bool>("odometry.publish_tf");
 
+  nh_->declare_parameter<bool>("odometry.frequency_reduction");
+
   nh_->get_parameter_or<bool>(
     "odometry.use_imu",
     use_imu_,
@@ -51,6 +53,11 @@ Odometry::Odometry(
     "odometry.publish_tf",
     publish_tf_,
     false);
+
+  nh_->get_parameter_or<unsigned>(
+    "odometry.frequency_reduction",
+    frequency_reduction_,
+    1);
 
   nh_->get_parameter_or<std::string>(
     "odometry.frame_id",
@@ -143,6 +150,13 @@ void Odometry::joint_state_and_imu_callback(
 
 void Odometry::publish(const rclcpp::Time & now)
 {
+  // Skip messages to reduce publish frequency
+  static unsigned count = 0;
+  count++;
+  if (count % frequency_reduction_ != 0) {
+    return;
+  }
+
   auto odom_msg = std::make_unique<nav_msgs::msg::Odometry>();
 
   odom_msg->header.frame_id = frame_id_of_odometry_;
