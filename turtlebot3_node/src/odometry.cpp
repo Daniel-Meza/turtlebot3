@@ -42,7 +42,7 @@ Odometry::Odometry(
   nh_->declare_parameter<bool>("odometry.use_imu");
   nh_->declare_parameter<bool>("odometry.publish_tf");
 
-  nh_->declare_parameter<bool>("odometry.frequency_reduction");
+  nh_->declare_parameter<int>("odometry.frequency_reduction");
 
   nh_->get_parameter_or<bool>(
     "odometry.use_imu",
@@ -54,7 +54,7 @@ Odometry::Odometry(
     publish_tf_,
     false);
 
-  nh_->get_parameter_or<unsigned>(
+  nh_->get_parameter_or<int>(
     "odometry.frequency_reduction",
     frequency_reduction_,
     1);

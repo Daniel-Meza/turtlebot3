@@ -88,7 +88,7 @@ private:
   bool use_imu_;
   bool publish_tf_;
 
-  unsigned frequency_reduction_;
+  int frequency_reduction_;
 
   std::array<double, 2> diff_joint_positions_;
   double imu_angle_;
