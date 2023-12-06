@@ -98,6 +98,7 @@ private:
   std::shared_ptr<DynamixelSDKWrapper> dxl_sdk_wrapper_;
 
   std::list<sensors::Sensors *> sensors_;
+  uint8_t sensors_publish_rate_;
   std::map<std::string, devices::Devices *> devices_;
 
   std::unique_ptr<Odometry> odom_;

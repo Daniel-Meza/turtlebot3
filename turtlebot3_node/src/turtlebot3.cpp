@@ -153,6 +153,7 @@ void TurtleBot3::add_sensors()
   this->declare_parameter<uint8_t>("sensors.illumination");
   this->declare_parameter<uint8_t>("sensors.ir");
   this->declare_parameter<uint8_t>("sensors.sonar");
+  this->declare_parameter<uint8_t>("sensors.publish_rate");
 
   this->get_parameter_or<uint8_t>(
     "sensors.bumper_1",
@@ -174,6 +175,10 @@ void TurtleBot3::add_sensors()
     "sensors.sonar",
     is_connected_sonar,
     0);
+  this->get_parameter_or<uint8_t>(
+    "sensors.publish_rate",
+    sensors_publish_rate_,
+    50);
 
   sensors_.push_back(
     new sensors::BatteryState(
@@ -215,7 +220,7 @@ void TurtleBot3::run()
 {
   RCLCPP_INFO(this->get_logger(), "Run!");
 
-  publish_timer(std::chrono::milliseconds(50));
+  publish_timer(std::chrono::milliseconds(sensors_publish_rate_));
   heartbeat_timer(std::chrono::milliseconds(100));
 
   parameter_event_callback();
